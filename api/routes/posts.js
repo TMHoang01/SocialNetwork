@@ -6,7 +6,7 @@ const Comment = require('../models/Comment');
 const verify = require('../utils/verifyToken');
 const {getUserIDFromToken} = require('../utils/getUserIDFromToken');
 var multer  = require('multer');
-const { Storage } = require('@google-cloud/storage');
+// const { Storage } = require('@google-cloud/storage');
 var {responseError, setAndSendResponse} = require('../response/error');
 const validInput = require('../utils/validInput');
 const MAX_IMAGE_NUMBER = 4;
@@ -41,21 +41,26 @@ const subjectArray = {
     'Khủng bố': 'Khủng bố',
 
 };
+function isEmptyObject(obj) {
+    return !Object.keys(obj).length;
+}
 
-const categoryArray = ['0', '1'];
+var storage = require("firebase-admin");
 
-// Create new storage instance with Firebase project credentials
-const storage = new Storage({
-    projectId: process.env.GCLOUD_PROJECT_ID,
-    credentials: {
-        private_key: process.env.private_key,
-        client_email: process.env.client_email
-    }
-});
+var serviceAccount = require("../config/firebase-key.json");
+const { json } = require('express');
 
-// Create a bucket associated to Firebase storage bucket
-const bucket =
-    storage.bucket(process.env.GCLOUD_STORAGE_BUCKET_URL);
+const BUCKET = 'gs://savvy-celerity-368016.appspot.com';
+
+if (storage.apps.length === 0) {
+    storage.initializeApp({
+    credential: storage.credential.cert(serviceAccount),
+    storageBucket: BUCKET,
+    });
+}
+
+const bucket = storage.storage().bucket();
+
 
 // Initiating a memory storage engine to store files as Buffer objects
 const uploader = multer({
@@ -188,7 +193,15 @@ Token co the co hoac khong
 CAN_NOT_CONNECT_TO_DB neu get post loi
 */
 router.post('/get_list_posts', async (req, res) => {
-    var {token, index, count, last_id} = req.query;
+    console.log('get_list_posts: body: ', req.body, 'query: ', req.query);
+    if(Object.keys(req.body).length === 0) {
+        console.log('req.query != null');
+        var {token, index, count, last_id} = req.query;
+
+    }else{
+        console.log(req.body);
+       var {token, index, count, last_id} = req.body;
+    }
     var data;
     // PARAMETER_IS_NOT_ENOUGH
     if((index !== 0 && !index) || (count !== 0 && !count)) {
@@ -252,7 +265,9 @@ router.post('/get_list_posts', async (req, res) => {
         posts: slicePosts.map(post => {
             return {
                 id: post._id,
-                image: post.image.length > 0 ? post.image.map(image => { return {id: image._id, url: image.url};}) : null,
+                image: post.image.length > 0 ? 
+                // post.image.length :( "0:"+ post.image.length),
+                post.image.map(image => { return {id: image?._id, url: image?.url};}) : null,
                 video: post.video.url ? {
                     url: post.video.url,
                     thumb: null
@@ -297,10 +312,12 @@ PARAMETER_VALUE_IS_INVALID cua id
 CAN_NOT_CONNECT_TO_DB neu lay bai post that bai tu csdl hoac lay user bi loi
 */
 router.post('/get_post', async (req, res) => {
+    console.log("get_post: ", req.query, req.body);
+    // json to string req
     var {token, id} = req.query;
     var data;
 
-    // PARAMETER_IS_NOT_ENOUGH
+   // PARAMETER_IS_NOT_ENOUGH
     if(id !== 0 && !id) {
         console.log("No have parameter id");
         return setAndSendResponse(res, responseError.PARAMETER_IS_NOT_ENOUGH);
@@ -373,7 +390,7 @@ function can_edit(user, author) {
 }
 
 function uploadFile(file) {
-    const newNameFile = new Date().toISOString() + file.originalname;
+    const newNameFile = new Date().toISOString() +'.' + file.originalname;
     const blob = bucket.file(newNameFile);
     const blobStream = blob.createWriteStream({
         metadata: {
@@ -422,7 +439,9 @@ CAN_NOT_CONNECT_TO_DB neu khong luu duoc post vao csdl
 */
 var cpUpload = uploader.fields([{ name: 'image'}, { name: 'video'}]);
 router.post('/add_post', cpUpload, verify, async (req, res, next) => {
-    var {described, status} = req.query;
+
+    var {described, status} = req.body;
+    console.log('add_post body', req.body, 'query', req.query);
     var image, video;
     if(req.files) {
         image = req.files.image;

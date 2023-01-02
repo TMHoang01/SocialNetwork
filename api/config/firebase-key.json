@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "savvy-celerity-368016",
+  "private_key_id": "20060d53b2135db3662095ab40f3b8cc19685aff",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCt0jc3vYywtmUx\nCDEqJI1rNDwNG93tZtixvRz9ooxyJVDa7qhmWQV+7BZ1NRkRTogcoO4uEDZ1h5IP\natHEP0eYVzuishHoSTWShF59Pav9Gh1wAUIOtUzM23kcRBhUsefm5eJn40YGAzVg\nPLKsCM8qeN166Mtw1WTFuwO2Ck/MmAuDE38EcAd7afQopZkElRIjhrk+sBlfKg49\nCslZg/EAsdFf2E1oBXj08ocFHlTZ98tfoj8Jy7X9hFwJ1YQhDdb/fJgQeqJZK7mu\nXp3/uCPgFuok8IsIxZOfHyHHnjnxxGT1ibW3W+NsxsTDXEU80Oh438Vx8UJOhx2R\nB5dPD1eXAgMBAAECggEAASANYrYGp4YKOrTB4fL4I3D+nzBiXSaIdBX+K/yQCwfW\nX5Q8g8jkEzrCtSyutDs++bqfK5PbueDqd/f6czYXc2OjBP+9qbRYioYm3SdgunMi\nw5I4+aU4REwYSSKYYPTmo3IfFUVcqXaO9OIn6RFdYIPXWNZGQiZiJysDdTNcUuiG\nynuroFVlnCJTQ1i4thyCjhqdIAWjkmjFDBmNqOVvyaomZSIub8MJf/mVLvRKaPgL\nJ28wSeS9hWqLCr4Dx7LBp6kuJ/7a3UYWMLYQYtcu2wjOpLe2u4Fn+iN5PGycwbag\nGULKGZO6oMSUFildxBI+u5kHNXEVpTZwHEUrBLaY1QKBgQDWT3wdnADF79l2SyYZ\nIh23RULxFwHrE0LcrwME/1w2YxXxekjhWfJ2TaobJZfz9x9PcsY/SIX52TKRHuHY\nWbmoM7TUjg8NJVXu/aY0XY2UUu0uOKupEJVvfa6ciJlUdG0tRs6EGxthuK2yGXOv\nzlW1QKT9leCMFAK4c4CSsvj0FQKBgQDPomPQd493FaA4OHBq53otxkf14R0P1zxN\nkbDVO2w9CLNZWNyKhA9i9l/xz8QwFX/mR+y+tpYuc3QS8LBYMQXFkDnAZtVz58da\nusdcu5uTwp9vLBInw9qUwEVplr8tMZbEosjLAfx5Y5AXCWzo08feUP+Rdghti5Dh\nNeoJt7ar+wKBgAWvyEBU4mReL+wGpHUoRZeWW+dfz+o38Z8/eZoJWJ4M1Qk6UHLC\nWz+uYeQkhDqyBP+rsPz+5KczjzbwldeS0e1XqeW1+0pDAlu8GUvsa5RS+v4t/MgY\nq45wzFBVA5SNHlSEO3if64MVTm6aZEp29ClCFN6xumqdIVFZp0C9RQPdAoGALTQx\nfuVIuqhepV7EOsICe4y7hfBon1ZArrKVSRcSzYbjZQRPn2h44Ra6dK7DC6Tin4Px\nKuQddid0kdsMyWaC1yw7JoQ83GsNn9ciKDJAAL9SbqWtnjKpl9D0S7SiEnjFVjIK\nfQgFq3fdmuZWa6oPzXrc6RJFa3QDKsTOGyeAAZkCgYBgQzKrzBCLX6kWnFjLmUGm\nwC1PdZc+CcD+iuamfINuhhGRDmteE5sOxwjM549MQyRHdpTl818ewswZjL8sdFLt\nYZ7W91ue6BsKxqwVzytYNdUl23h/EYVzohkhfmgREdKc5YMrWea+Ce5pC6Rp5N6N\n46GoPW/qRd9hiku2Nirx0w==\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-b9nrr@savvy-celerity-368016.iam.gserviceaccount.com",
+  "client_id": "103509801662360104051",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-b9nrr%40savvy-celerity-368016.iam.gserviceaccount.com"
+}

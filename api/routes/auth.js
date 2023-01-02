@@ -12,23 +12,25 @@ const removeAccents = require('../utils/removeAccents');
 
 
 var multer = require('multer');
-const { Storage } = require('@google-cloud/storage');
 const MAX_IMAGE_NUMBER = 4;
 const MAX_SIZE_IMAGE = 4 * 1024 * 1024; // for 4MB
 
-// Create new storage instance with Firebase project credentials
 
-const storage = new Storage({
-  projectId: process.env.GCLOUD_PROJECT_ID,
-  credentials: {
-    private_key: process.env.private_key,
-    client_email: process.env.client_email
-  }
-});
+var storage = require("firebase-admin");
 
-// Create a bucket associated to Firebase storage bucket
-const bucket =
-  storage.bucket(process.env.GCLOUD_STORAGE_BUCKET_URL);
+var serviceAccount = require("../config/firebase-key.json");
+
+const BUCKET = 'gs://savvy-celerity-368016.appspot.com';
+
+if (storage.apps.length === 0) {
+  storage.initializeApp({
+    credential: storage.credential.cert(serviceAccount),
+    storageBucket: BUCKET,}
+  );
+}
+
+
+
 
 // Initiating a memory storage engine to store files as Buffer objects
 const uploader = multer({
@@ -50,7 +52,8 @@ const LCS = require('../utils/LCS');
 // "phonenumber": "0789554152",
 // "password": "nguyen123"
 //}
-router.post('/signup', async (req, res) => {
+router.post('/register', async (req, res) => {
+  console.log('hey register: ', req.body, req.query);
   const { password } = req.query;
   let phoneNumber = req.query.phonenumber;
 
@@ -232,8 +235,11 @@ router.post('/check_verify_code', async (req, res) => {
 // @desc   login
 // @access Public
 router.post('/login', async (req, res) => {
-  const { password } = req.query;
-  let phoneNumber = req.query.phonenumber;
+  // console.log("login");
+  // res.query ??= req.body;
+  console.log('login: ',req.body , req.query);
+  const { password } = req.body;
+  let phoneNumber = req.body.phonenumber;
   if (phoneNumber === undefined || password === undefined) {
     return callRes(res, responseError.PARAMETER_IS_NOT_ENOUGH, 'phoneNumber, password');
   }
@@ -475,6 +481,11 @@ router.post("/check_new_version", verify, async (req, res) => {
     return callRes(res, responseError.OK, data);
   }
 });
+
+router.post("/index",  (req, res) => {
+  res.send("Hello World maam");
+});
+
 
 var currentVersion = "1.0";
 

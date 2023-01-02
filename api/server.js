@@ -14,6 +14,7 @@ app.use(cors());
 
 // connect to MongoDB
 const url = process.env.mongoURI;
+console.log(url);
 mongoose.connect(url,
     { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
     .then(() => console.log("MongoDB connected"))
@@ -42,4 +43,23 @@ app.use(function (err, req, res, next) {
 })
 
 const port = process.env.PORT || 5000;
-app.listen(port, () => console.log(`Server is running on port ${port}`))
+app.listen(port, () => console.log(`Server is running on port http://127.0.0.1:${port}`))
+
+/*
+const firebase = require('firebase');
+
+// Initialize Firebase
+const firebaseConfig = {
+  apiKey: '<YOUR_API_KEY>',
+  authDomain: '<YOUR_AUTH_DOMAIN>',
+  databaseURL: '<YOUR_DATABASE_URL>',
+  projectId: '<YOUR_PROJECT_ID>',
+  storageBucket: '<YOUR_STORAGE_BUCKET>',
+  messagingSenderId: '<YOUR_MESSAGING_SENDER_ID>',
+  appId: '<YOUR_APP_ID>',
+};
+firebase.initializeApp(firebaseConfig);
+
+// Get a reference to the Realtime Database
+const database = firebase.database();
+*/

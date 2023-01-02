@@ -30,6 +30,7 @@ const uploader = multer({
 });
 
 router.post ('/get_user_info', async (req, res) => {
+  console.log('get_user_info: ', req.headers, req.query);
   let { token, user_id } = req.query;
   let tokenUser, tokenError;
   if (token) {

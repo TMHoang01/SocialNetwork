@@ -90,11 +90,13 @@ router.post('/get_requested_friends', verify, async (req, res) => {
 //   "user_id" : "gh98082"
 // }
 router.post('/set_request_friend', verify, async (req, res) => {
+  console.log('set_request_friend body: ', req.body, 'query: ', req.query.user_id);
   let data = {
     requested_friends: null // số người đang đươc tài khoản hiện tại gửi request friend
   }
 
-  let { user_id } = req.query; // user_id là id của người nhận request friend
+  let { token, user_id } = req.query; // user_id là id của người nhận request friend
+  console.log('user_id: ',typeof user_id);
   if (user_id === undefined)
     return callRes(res, responseError.PARAMETER_IS_NOT_ENOUGH, 'user_id');
   if (typeof user_id != 'string')
