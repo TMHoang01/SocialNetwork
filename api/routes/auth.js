@@ -53,30 +53,30 @@ const LCS = require('../utils/LCS');
 // "password": "nguyen123"
 //}
 router.post('/register', async (req, res) => {
-  console.log('hey register: ', req.body, req.query);
-  const { password } = req.query;
-  let phoneNumber = req.query.phonenumber;
+  console.log('hey register: ', req.body, req.body);
+  const { password } = req.body;
+  let phonenumber = req.body.phonenumber;
 
-  if (phoneNumber === undefined || password === undefined) {
-    return callRes(res, responseError.PARAMETER_IS_NOT_ENOUGH, 'phoneNumber, password');
+  if (phonenumber === undefined || password === undefined) {
+    return callRes(res, responseError.PARAMETER_IS_NOT_ENOUGH, 'phonenumber, password');
   }
-  if (typeof phoneNumber != 'string' || typeof password != 'string') {
-    return callRes(res, responseError.PARAMETER_TYPE_IS_INVALID, 'phoneNumber, password');
+  if (typeof phonenumber != 'string' || typeof password != 'string') {
+    return callRes(res, responseError.PARAMETER_TYPE_IS_INVALID, 'phonenumber, password');
   }
-  if (!validInput.checkPhoneNumber(phoneNumber)) {
-    return callRes(res, responseError.PARAMETER_VALUE_IS_INVALID, 'phoneNumber');
+  if (!validInput.checkPhoneNumber(phonenumber)) {
+    return callRes(res, responseError.PARAMETER_VALUE_IS_INVALID, 'phonenumber');
   }
   if (!validInput.checkUserPassword(password)) {
     return callRes(res, responseError.PARAMETER_VALUE_IS_INVALID, 'password');
   }
-  if (phoneNumber == password) {
+  if (phonenumber == password) {
     return callRes(res, responseError.PARAMETER_VALUE_IS_INVALID, 'trùng phone và pass');
   }
   try {
-    let user = await User.findOne({phoneNumber});
+    let user = await User.findOne({phonenumber});
     if (user) return callRes(res, responseError.USER_EXISTED);
     const newUser = new User({
-      phoneNumber,
+      phonenumber,
       password,
       verifyCode: random4digit(),
       isVerified: false
@@ -97,7 +97,7 @@ router.post('/register', async (req, res) => {
 
           let data = {
             id: saved.id,
-            phoneNumber: saved.phoneNumber,
+            phonenumber: saved.phonenumber,
             verifyCode: saved.verifyCode,
             isVerified: saved.isVerified
           }
@@ -117,7 +117,7 @@ router.post('/register', async (req, res) => {
 // @desc   get verified code
 // @access Public
 router.post('/get_verify_code', async (req, res) => {
-  const { phonenumber } = req.query;
+  const { phonenumber } = req.body;
 
   if (!phonenumber) {
     console.log("PARAMETER_IS_NOT_ENOUGH phonenumber");
@@ -132,7 +132,7 @@ router.post('/get_verify_code', async (req, res) => {
   }
 
   try {
-    let user = await User.findOne({ phoneNumber: phonenumber });
+    let user = await User.findOne({ phonenumber: phonenumber });
     if(!user) {
       console.log("phonenumber is not existed");
       return callRes(res, responseError.USER_IS_NOT_VALIDATED, 'phonenumber is not existed');
@@ -171,7 +171,7 @@ router.post('/get_verify_code', async (req, res) => {
 // @desc   check verified code
 // @access Public
 router.post('/check_verify_code', async (req, res) => {
-  const { phonenumber, code_verify } = req.query;
+  const { phonenumber, code_verify } = req.body;
 
   if (!phonenumber || !code_verify) {
     return callRes(res, responseError.PARAMETER_IS_NOT_ENOUGH, 'phonenumber, code_verify');
@@ -187,7 +187,7 @@ router.post('/check_verify_code', async (req, res) => {
   }
 
   try {
-    let user = await User.findOne({ phoneNumber: phonenumber });
+    let user = await User.findOne({ phonenumber: phonenumber });
     if(!user) {
       console.log("phonenumber is not existed");
       return callRes(res, responseError.PARAMETER_VALUE_IS_INVALID, 'phonenumber is not existed');
@@ -237,27 +237,27 @@ router.post('/check_verify_code', async (req, res) => {
 router.post('/login', async (req, res) => {
   // console.log("login");
   // res.query ??= req.body;
-  console.log('login: ',req.body , req.query);
+  console.log('login: ',req.body , req.body);
   const { password } = req.body;
-  let phoneNumber = req.body.phonenumber;
-  if (phoneNumber === undefined || password === undefined) {
-    return callRes(res, responseError.PARAMETER_IS_NOT_ENOUGH, 'phoneNumber, password');
+  let phonenumber = req.body.phonenumber;
+  if (phonenumber === undefined || password === undefined) {
+    return callRes(res, responseError.PARAMETER_IS_NOT_ENOUGH, 'phonenumber, password');
   }
-  if (typeof phoneNumber != 'string' || typeof password != 'string') {
-    return callRes(res, responseError.PARAMETER_TYPE_IS_INVALID, 'phoneNumber, password');
+  if (typeof phonenumber != 'string' || typeof password != 'string') {
+    return callRes(res, responseError.PARAMETER_TYPE_IS_INVALID, 'phonenumber, password');
   }
-  if (!validInput.checkPhoneNumber(phoneNumber)) {
-    return callRes(res, responseError.PARAMETER_VALUE_IS_INVALID, 'phoneNumber');
+  if (!validInput.checkPhoneNumber(phonenumber)) {
+    return callRes(res, responseError.PARAMETER_VALUE_IS_INVALID, 'phonenumber');
   }
   if (!validInput.checkUserPassword(password)) {
     return callRes(res, responseError.PARAMETER_VALUE_IS_INVALID, 'password');
   }
-  if (phoneNumber == password) {
+  if (phonenumber == password) {
     return callRes(res, responseError.PARAMETER_VALUE_IS_INVALID, 'trùng phone và pass');
   }
   try {
     // check for existing user
-    let user = await User.findOne({ phoneNumber });
+    let user = await User.findOne({ phonenumber });
     if (!user) return callRes(res, responseError.USER_IS_NOT_VALIDATED, 'không có user này');
     if (!user.isVerified) return callRes(res, responseError.USER_IS_NOT_VALIDATED, 'chưa xác thực code verify');
     bcrypt.compare(password, user.password)
@@ -292,7 +292,7 @@ router.post('/login', async (req, res) => {
 })
 
 router.post("/change_password", verifyToken, async (req, res) => {
-  const { token, password, new_password } = req.query;
+  const { token, password, new_password } = req.body;
 
   if (!password || !new_password) {
     return callRes(res, responseError.PARAMETER_IS_NOT_ENOUGH, 'password, new_password');
@@ -361,7 +361,7 @@ router.post("/logout", verify, async (req, res) => {
 })
 
 router.post("/set_devtoken", verify, async (req, res) => {
-  var { token, devtype, devtoken } = req.query;
+  var { token, devtype, devtoken } = req.body;
   if (token === undefined || devtype === undefined || devtoken === undefined)
     return callRes(res, responseError.PARAMETER_IS_NOT_ENOUGH, 'token and devtype and devtoken');
   let id = req.user.id;
@@ -378,14 +378,15 @@ router.post("/set_devtoken", verify, async (req, res) => {
 router.post("/change_info_after_signup", verify, uploader.single('avatar'), async (req, res) => {
   // do what you want
   // Validation
+  console.log('change_info_after_signup: ');
   let code, message;
-  if (req.query.username === undefined) {
+  if (req.body.username === undefined) {
     return callRes(res, responseError.PARAMETER_IS_NOT_ENOUGH, 'username');
   }
-  if (req.query.username.length == 0){
+  if (req.body.username.length == 0){
       return callRes(res, responseError.PARAMETER_VALUE_IS_INVALID, 'username');
   }
-  let str = removeAccents(req.query.username);
+  let str = removeAccents(req.body.username);
   var regex = /^[a-zA-Z][a-zA-Z_ ]*$/;
   if (!regex.test(str)){
       return callRes(res, responseError.PARAMETER_VALUE_IS_INVALID, 'username');
@@ -411,7 +412,7 @@ router.post("/change_info_after_signup", verify, uploader.single('avatar'), asyn
              return callRes(res, responseError.ACTION_HAS_BEEN_DONE_PREVIOUSLY_BY_THIS_USER);
          }
 
-         user.name = req.query.username;
+         user.name = req.body.username;
          let promise = await uploadFile(req.file);
          user.avatar = promise;
          user.save();
@@ -421,7 +422,7 @@ router.post("/change_info_after_signup", verify, uploader.single('avatar'), asyn
              data: {
                  id: user.id,
                  username: user.name,
-                 phonenumber: user.phoneNumber,
+                 phonenumber: user.phonenumber,
                  created: String(Math.floor(user.registerDate / 1000)),
                  avatar: user.avatar.url
              }
@@ -437,7 +438,7 @@ router.post("/change_info_after_signup", verify, uploader.single('avatar'), asyn
             return callRes(res, responseError.ACTION_HAS_BEEN_DONE_PREVIOUSLY_BY_THIS_USER);
         }
 
-        user.name = req.query.username;
+        user.name = req.body.username;
         user.save();
         let data = {
             code: "1000",
@@ -445,7 +446,7 @@ router.post("/change_info_after_signup", verify, uploader.single('avatar'), asyn
             data: {
                 id: user.id,
                 username: user.name,
-                phonenumber: user.phoneNumber,
+                phonenumber: user.phonenumber,
                 created: String(Math.floor(user.registerDate / 1000)),
                 avatar: null
             }
@@ -457,7 +458,7 @@ router.post("/change_info_after_signup", verify, uploader.single('avatar'), asyn
 });
 
 router.post("/check_new_version", verify, async (req, res) => {
-  var { token, last_update } = req.query;
+  var { token, last_update } = req.body;
   if (token === undefined || last_update === undefined)
     return callRes(res, responseError.PARAMETER_IS_NOT_ENOUGH, 'token and last_update');
     let id = req.user.id;

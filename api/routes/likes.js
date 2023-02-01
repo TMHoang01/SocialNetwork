@@ -4,7 +4,7 @@ const verify = require('../utils/verifyToken');
 var {responseError, setAndSendResponse} = require('../response/error');
 
 router.post('/like', verify, async (req, res) => {
-    var {id} = req.query;
+    var {id} = req.body;
     var user = req.user;
 
     // PARAMETER_IS_NOT_ENOUGH

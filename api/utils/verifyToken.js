@@ -3,13 +3,14 @@ const User = require('../models/User');
 var {responseError, setAndSendResponse, callRes} = require('../response/error');
 
 module.exports = function (req, res, next) {
-    const token = req.query.token || req.body.token;
+    // console.log("verifyToken body: ", req.body, " query: ", req.query);
+    const {token} = req.body;
     if(token !== 0 && !token) {
-        console.log("PARAMETER_IS_NOT_ENOUGH");
+        console.log("PARAMETER_IS_NOT_ENOUGH token");
         return setAndSendResponse(res, responseError.PARAMETER_IS_NOT_ENOUGH);
     }
     if(token && typeof token !== "string") {
-        console.log("PARAMETER_TYPE_IS_INVALID");
+        console.log("PARAMETER_TYPE_IS_INVALID token");
         return setAndSendResponse(res, responseError.PARAMETER_TYPE_IS_INVALID);
     }
 

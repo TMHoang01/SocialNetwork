@@ -17,7 +17,7 @@ function countWord(str) {
 // @desc   add new comment
 // @access Public
 router.post('/set_comment', verify, async (req, res) => {
-    var {id, comment, index, count} = req.query;
+    var {id, comment, index, count} = req.body;
     var user = req.user;
 
     if(!id || !comment || (index !== 0 && !index) || (count !== 0 && !count)) {
@@ -114,7 +114,7 @@ router.post('/set_comment', verify, async (req, res) => {
 // @desc   add new comment
 // @access Public
 router.post('/get_comment', async (req, res) => {
-    var {token, id, index, count} = req.query;
+    var {token, id, index, count} = req.body;
 
     if(!id || (index !== 0 && !index) || (count !== 0 && !count)) {
         console.log("No have parameter id, index, count");

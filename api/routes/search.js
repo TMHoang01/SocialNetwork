@@ -11,7 +11,7 @@ const { timeToSecond } = require('../utils/validTime');
 // search posts by keyword
 router.post('/search', verify, (req, res) => {
 
-    var { keyword, index, count} = req.query;
+    var { keyword, index, count} = req.body;
     const user = req.user;
 
     // PARAMETER_IS_NOT_ENOUGH
@@ -182,7 +182,7 @@ router.post('/search', verify, (req, res) => {
 
 // get saved search
 router.post('/get_saved_search', verify, (req, res) => {
-    var { index, count } = req.query;
+    var { index, count } = req.body;
     // PARAMETER_IS_NOT_ENOUGH
     if((index !== 0 && !index) || (count !== 0 && !count)) {
         console.log("No have parameter index, count");
@@ -252,7 +252,7 @@ router.post('/get_saved_search', verify, (req, res) => {
 
 // delete saved search
 router.post('/del_saved_search', verify, async (req, res) => {
-    var { search_id, all } = req.query
+    var { search_id, all } = req.body
     if (search_id !== 0 && !search_id && all !== 0 && !all) {
         console.log("PARAMETER IS NOT ENOUGH")
         return callRes(res, responseError.PARAMETER_IS_NOT_ENOUGH)

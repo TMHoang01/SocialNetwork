@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node api/server.js",
     
-    "server": "nodemon api/server.js  --host=192.168.1.110 --port=5000"
+    "server": "nodemon api/server.js  --host=192.168.110.3 --port=5000"
   },
   "author": "team20201",
   "license": "ISC",

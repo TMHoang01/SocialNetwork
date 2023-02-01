@@ -193,13 +193,14 @@ Token co the co hoac khong
 CAN_NOT_CONNECT_TO_DB neu get post loi
 */
 router.post('/get_list_posts', async (req, res) => {
-    console.log('get_list_posts: body: ', req.body, 'query: ', req.query);
+    console.log('get_list_posts: ');
+    // console.log('get_list_posts: body: ', req.body, 'query: ', req.query);
     if(Object.keys(req.body).length === 0) {
-        console.log('req.query != null');
+        // console.log('req.query != null');
         var {token, index, count, last_id} = req.query;
 
     }else{
-        console.log(req.body);
+        // console.log(req.body);
        var {token, index, count, last_id} = req.body;
     }
     var data;
@@ -314,7 +315,15 @@ CAN_NOT_CONNECT_TO_DB neu lay bai post that bai tu csdl hoac lay user bi loi
 router.post('/get_post', async (req, res) => {
     console.log("get_post: ", req.query, req.body);
     // json to string req
-    var {token, id} = req.query;
+    if(Object.keys(req.body).length === 0) {
+        // console.log('req.query != null');
+        var {token, id} = req.query;
+
+    }else{
+        // console.log(req.body);
+       var {token, id} = req.body;
+    }
+    // var {token, id} = req.query;
     var data;
 
    // PARAMETER_IS_NOT_ENOUGH
@@ -439,9 +448,9 @@ CAN_NOT_CONNECT_TO_DB neu khong luu duoc post vao csdl
 */
 var cpUpload = uploader.fields([{ name: 'image'}, { name: 'video'}]);
 router.post('/add_post', cpUpload, verify, async (req, res, next) => {
+    console.log('add_post body', req.body.toString, 'query', req.query,  req.user);
 
     var {described, status} = req.body;
-    console.log('add_post body', req.body, 'query', req.query);
     var image, video;
     if(req.files) {
         image = req.files.image;
@@ -456,7 +465,7 @@ router.post('/add_post', cpUpload, verify, async (req, res, next) => {
 
     // PARAMETER_TYPE_IS_INVALID
     if((described && typeof described !== "string") || (status && typeof status !== "string")) {
-        console.log("PARAMETER_TYPE_IS_INVALID");
+        console.log("PARAMETER_TYPE_IS_INVALID described "+ described);
         return setAndSendResponse(res, responseError.PARAMETER_TYPE_IS_INVALID);
     }
 
@@ -589,9 +598,12 @@ CAN_NOT_CONNECT_TO_DB khi khong xoa duoc post trong csdl
 Da delete ca comment di kem
 */
 router.post('/delete_post', verify, async (req, res) => {
-    var { id } = req.query;
-    var user = req.user;
+    console.log("delete_post body: ", req.body, "query: ", req.query);
 
+    var { id } = req.body;
+    var user = req.user; 
+    // console.log("user: ", user);
+    // console.log("id: ", id);
     // PARAMETER_IS_NOT_ENOUGH
     if(id !== 0 && !id) {
         console.log("No have parameter id");
@@ -692,14 +704,15 @@ MAXIMUM_NUMBER_OF_IMAGES
 MAX_WORD_POST cua described
 */
 router.post('/edit_post', cpUpload, verify, async (req, res) => {
-    var { id, status, image_del, image_sort, described, auto_accept, auto_block } = req.query;
+    console.log("edit_post: body "+JSON.stringify(req.body) + " query "+JSON.stringify(req.query));
+
+    var { id, status, image_del, image_sort, described, auto_accept, auto_block } = req.body;
     var image, video;
     if(req.files) {
         image = req.files.image;
         video = req.files.video;
     }
     var user = req.user;
-
     if(image_del) {
         try {
             image_del = JSON.parse(image_del);

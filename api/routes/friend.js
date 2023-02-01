@@ -23,7 +23,8 @@ const MAX_FRIEND_NUMBER = 500;
 //   "count": 10
 // }
 router.post('/get_requested_friends', verify, async (req, res) => {
-  let { index, count } = req.query;
+  let { index, count } = req.body;
+  console.log('get_requested_friends ');
   let id = req.user.id;
   let data = {
     request: [],
@@ -56,7 +57,7 @@ router.post('/get_requested_friends', verify, async (req, res) => {
       }
       let sentUserID = thisUser.friendRequestReceived[i].fromUser.toString();
       sentUser = await User.findById(sentUserID)
-        .select({ "friends": 1, "friendRequestSent": 1, "phoneNumber": 1, "_id": 1, "name": 1, "avatar": 1 });
+        .select({ "friends": 1, "friendRequestSent": 1, "phonenumber": 1, "_id": 1, "name": 1, "avatar": 1 });
 
       // console.log(sentUser);
       newElement.id = sentUser._id;
@@ -90,13 +91,13 @@ router.post('/get_requested_friends', verify, async (req, res) => {
 //   "user_id" : "gh98082"
 // }
 router.post('/set_request_friend', verify, async (req, res) => {
-  console.log('set_request_friend body: ', req.body, 'query: ', req.query.user_id);
+  console.log('set_request_friend body: ', req.body);
   let data = {
     requested_friends: null // số người đang đươc tài khoản hiện tại gửi request friend
   }
 
-  let { token, user_id } = req.query; // user_id là id của người nhận request friend
-  console.log('user_id: ',typeof user_id);
+  let { token, user_id } = req.body; // user_id là id của người nhận request friend
+  // console.log('user_id: ',typeof user_id);
   if (user_id === undefined)
     return callRes(res, responseError.PARAMETER_IS_NOT_ENOUGH, 'user_id');
   if (typeof user_id != 'string')
@@ -155,6 +156,7 @@ router.post('/set_request_friend', verify, async (req, res) => {
           targetUser = await targetUser.save();
         }
       }
+      // console('set_request_friend data: ', data)
       return callRes(res, responseError.OK, data);
 
     } catch (err) {
@@ -168,7 +170,7 @@ router.post('/set_request_friend', verify, async (req, res) => {
 router.post("/set_block", verify, async(req, res) => {
     var thisUser, targetUser;
 
-    let { token, user_id, type } = req.query;
+    let { token, user_id, type } = req.body;
     let id = req.user.id;
     thisUser = await User.findById(id);
     if (thisUser.isBlocked){
@@ -245,7 +247,7 @@ router.post('/set_accept_friend', verify, async (req, res) => {
 
   // user_id là id của người nhận request friend
   // is_accept : 0 là từ chối, 1 là đồng ý
-  let { user_id, is_accept } = req.query;
+  let { user_id, is_accept } = req.body;
   if ( user_id === undefined|| is_accept === undefined)
     return callRes(res, responseError.PARAMETER_IS_NOT_ENOUGH, 'user_id, is_accept');
   if (typeof user_id != 'string')
@@ -314,7 +316,7 @@ router.post('/set_accept_friend', verify, async (req, res) => {
 
 
 router.post("/get_list_blocks", verify, async(req, res) => {
-    let { token, index, count } = req.query;
+    let { token, index, count } = req.body;
     if (token === undefined || index === undefined || count === undefined){
         return callRes(res, responseError.PARAMETER_IS_NOT_ENOUGH, 'token and index and count');
     }
@@ -332,8 +334,8 @@ router.post("/get_list_blocks", verify, async(req, res) => {
     if (!isNumCount){
         return callRes(res, responseError.PARAMETER_VALUE_IS_INVALID, 'count');
     }
-    index = parseInt(req.query.index);
-    count = parseInt(req.query.count);
+    index = parseInt(req.body.index);
+    count = parseInt(req.body.count);
     if (index < 0){
         return callRes(res, responseError.PARAMETER_VALUE_IS_INVALID, 'index');
     }
@@ -385,14 +387,15 @@ router.post("/get_list_blocks", verify, async(req, res) => {
 // }
 router.post('/get_user_friends', verify, async (req, res) => {
   // input
-  let { user_id, index, count } = req.query;
+  let { user_id, index, count } = req.body;
   // user id from token
-  let id = req.user.id;
+  let id = req.body.id;
 
   let data = {
     friends: [],
     total: 0
   }
+  console.log('get_user_friends - user_id: ', user_id);
   if (user_id && typeof user_id != 'string')
     return callRes(res, responseError.PARAMETER_TYPE_IS_INVALID, 'user_id');
   // check input data
@@ -450,7 +453,7 @@ router.post('/get_user_friends', verify, async (req, res) => {
 
 router.post('/get_list_suggested_friends', verify, async (req, res) => {
   try {
-  const { index, count } = req.query;
+  const { index, count } = req.body;
   // check input data
   if ( index === undefined|| count === undefined)
     return callRes(res, responseError.PARAMETER_IS_NOT_ENOUGH, ': index, count');
